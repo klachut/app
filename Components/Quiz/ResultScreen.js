@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FlatList, View,  StyleSheet, Text } from 'react-native';
+import {useEffect} from "react";
 
 
 const results = [
@@ -29,10 +30,11 @@ const results = [
 ];
 
 
-const Item = ({title, type, score }) => (
+
+const Item = ({nick, type, score }) => (
 
   <View style={styles.item}>
-    <Text style={styles.bar} >{title}</Text>
+    <Text style={styles.bar} >{nick}</Text>
     <Text style={styles.bar} >{score}</Text>
     <Text style={styles.bar} >{type}</Text>
   </View>
@@ -42,22 +44,43 @@ const Item = ({title, type, score }) => (
 
 function ResultScreen({ navigation }) {
 
+    const [tags, setTags] = React.useState()
+
   const renderItem = ({ item }) => (
 
-     <Item title={item.title} score={item.score} type={item.type} />
+     <Item nick={item.nick} score={item.score} type={item.type} />
    );
 
+    const getQuiz = async () => {
+        try {
+            const response = await fetch('https://tgryl.pl/quiz/results');
+            const json = await response.json();
+            setTags(json);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+
+    }
 
 
-  return (
+    useEffect(() => {
+        //setTest(question)
+        getQuiz()
+    }, [])
+
+
+
+    return (
     <View style={styles.container}>
     <View style={styles.mainView}>
          <Text style={styles.barTitle} >Nick</Text>
          <Text style={styles.barTitle} >Score</Text>
          <Text style={styles.barTitle} >Category</Text>
-         </View>
+    </View>
         <FlatList
-     data={results}
+     data={tags}
      renderItem={renderItem}
      keyExtractor={item => item.id}
    />

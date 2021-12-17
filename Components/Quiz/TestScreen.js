@@ -74,6 +74,7 @@ const question = [{
 
 
 
+
 function TestScreen({ navigation, route }) {
 
 
@@ -99,41 +100,38 @@ function TestScreen({ navigation, route }) {
         getQuiz()
     }, [])
 
+
 function handleOnPress(answerNumber){
     if(test[questionNumber].answers[answerNumber].isCorrect===true){
         points.current++
     }
     if(questionNumber+1===test.length){
         setQuestionNumber(0)
-        navigation.navigate('Score',{points:points.current})
+        navigation.reset({routes: [{ name: 'Score', params: {points:points.current} }] });
         points.current=0
         return
     }
     setQuestionNumber(questionNumber+1);
 }
 
+function listOfAnswers(){
+
+       return test[questionNumber].answers.map((answers, index) => {
+           return(
+               <TouchableHighlight style={styles.button} onPress={() => handleOnPress(index)}>
+                   <Text style={styles.text_answer}>{test[questionNumber].answers[index].content}</Text>
+               </TouchableHighlight>
+           )
+    })
+
+    }
   return (
         test.length > 0 ? (
                <View style={{ flex: 1, backgroundColor: 'ivory' }}>
                    <View  style={styles.quest}>
                        <Text style={styles.text}>{test[questionNumber].question}</Text>
                    </View>
-
-                   <TouchableHighlight style={styles.button} onPress={() => handleOnPress(0)}>
-                       <Text style={styles.text_answer}>{test[questionNumber].answers[0].content}</Text>
-                   </TouchableHighlight>
-
-                   <TouchableHighlight style={styles.button} onPress={() => handleOnPress(1)}>
-                       <Text style={styles.text_answer}>{test[questionNumber].answers[1].content}</Text>
-                   </TouchableHighlight>
-
-                   <TouchableHighlight style={styles.button} onPress={() => handleOnPress(2)}>
-                       <Text style={styles.text_answer}>{test[questionNumber].answers[2].content}</Text>
-                   </TouchableHighlight>
-
-                   <TouchableHighlight style={styles.button} onPress={() => handleOnPress(3)}>
-                       <Text style={styles.text_answer}>{test[questionNumber].answers[3].content}</Text>
-                   </TouchableHighlight>
+                   {listOfAnswers()}
                </View>
            ) : <Text>Loading...</Text>
 

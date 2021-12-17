@@ -1,12 +1,42 @@
 import * as React from 'react';
 import { StatusBar, View,  StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {useEffect} from "react";
+import FormData from "form-data";
 
-
-
-
+const payload = {
+  "nick": "Jan",
+  "score": 5,
+  "total": 20,
+  "type": "historia",
+}
 
 
 function ScoreScreen({ navigation, route }) {
+
+  const sendData = async() => {
+    let formData = new FormData();
+    formData.append('nick', 'Jan');
+    console.log(JSON.stringify(payload))
+    fetch('https://tgryl.pl/quiz/result', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log('response object:',responseJson)
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  }
+
+  useEffect(() => {
+    sendData()
+  }, [])
 
   function goHome(){
     navigation.navigate('Tests')

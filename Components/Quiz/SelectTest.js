@@ -31,7 +31,7 @@ function SelectTest({ navigation }) {
         try {
             const response = await fetch('https://tgryl.pl/quiz/tests');
             const json = await response.json();
-            setTags(json)
+            setTags(json);
         } catch (error) {
             console.error(error);
         } finally {

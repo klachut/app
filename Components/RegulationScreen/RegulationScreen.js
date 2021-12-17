@@ -11,7 +11,7 @@ function RegulationScreen({ navigation }) {
   async function checkRegulations() {
       const regulation = await AsyncStorage.getItem('regulationAccept');
       if(JSON.parse(regulation)) {
-        navigation.navigate('SelectTest');
+        navigation.navigate('Test');
       }
    }
 
